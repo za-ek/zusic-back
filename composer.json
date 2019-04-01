@@ -9,7 +9,7 @@
       }
     ],
     "minimum-stability": "dev",
-    "name": "zusic-backend",
+    "name": "zaek/zusic-back",
     "require": {
         "zaek/framy": "^1.0",
         "duncan3dc/meta-audio": "^0.4.0",
