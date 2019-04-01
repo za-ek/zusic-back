@@ -48,9 +48,10 @@ foreach($FILES_LIST as $file) {
     $artist = findArtist($db, $mp3->getArtist());
     $album = findAlbum($db, $artist, $mp3->getAlbum(), $mp3->getYear());
 
-    $stmt = $db->prepare("SELECT id FROM tracks WHERE artist_id = :artist AND album_id = :album LIMIT 1");
+    $stmt = $db->prepare("SELECT id FROM tracks WHERE artist_id = :artist AND album_id = :album AND title = :title LIMIT 1");
     $stmt->bindValue(':artist', $artist);
     $stmt->bindValue(':album', $album);
+    $stmt->bindValue(':title', $mp3->getTitle());
     $result = $stmt->execute();
     if (!($row = $result->fetchArray())) {
         $stmt = $db->prepare(
