@@ -5,10 +5,11 @@ try {
     $controller = new \Zaek\Framy\Controller([
         'homeDir' => __DIR__,
         'routes' => [
-            'CLI|GET /artists' => '/web/ArtistList.php',
-            'CLI|GET /artists/<id:\d+>' => '/web/ArtistItem.php',
-            'CLI|GET /albums' => '/web/AlbumList.php',
-            'CLI|GET /albums/<id:\d+>' => '/web/AlbumItem.php',
+            'GET:json /artists' => '/web/ArtistList.php',
+            'GET:json /artists/<id:\d+>/albums' => '/web/AlbumList.php',
+            'GET:json /artists/<id:\d+>' => '/web/ArtistItem.php',
+            'GET:json /albums/<id:\d+>' => '/web/AlbumItem.php',
+            'GET /tracks/<id:\d+>' => '/web/Track.php',
 
             'CLI /scan' => '/jobs/ScanDirectory.php',
             'CLI /install' => '/install.php',
@@ -17,6 +18,10 @@ try {
         'dbFile' => __DIR__.'/db/music.sqlite',
     ]);
     $controller->handle();
+    $action = $controller->getRouter()->getRequestAction(
+        $controller->getRequest()->getMethod(),
+        $controller->getRequest()->getUri()
+    );
     $controller->getResponse()->flush();
 
 } catch (\Exception $e) {
