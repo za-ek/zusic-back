@@ -22,26 +22,15 @@ if(!file_exists($dataDir)) {
     echo "Data dir is empty (directory `{$dataDir}` not found)";
     return;
 }
-
-$FILES_LIST = [];
-$scanDirectory = function ($target) use (&$FILES_LIST, &$scanDirectory){
-    if(is_dir($target)){
-        $files = glob( $target . '*', GLOB_MARK );
-        foreach( $files as $file ) {
-            $scanDirectory( $file );
-        }
-    } else if(strcasecmp(substr($target, -4), '.mp3') == 0) {
-        $FILES_LIST[] = $target;
-    }
-};
-$scanDirectory($dataDir);
-
+global $db;
 $db = new SQLite3($dbFile);
 
+global $tagger;
 $tagger = new \duncan3dc\MetaAudio\Tagger;
 $tagger->addDefaultModules();
 
-foreach($FILES_LIST as $file) {
+function addMp3File($file) {
+    global $tagger, $db;
     $mp3 = $tagger->open($file);
     $duration = new \MP3File($file);
 
@@ -114,3 +103,16 @@ function findAlbum(SQLite3 $db, $artist, $album, $year) {
 
     return $album;
 }
+
+
+$scanDirectory = function ($target) use (&$scanDirectory){
+    if(is_dir($target)){
+        $files = glob( $target . '*', GLOB_MARK );
+        foreach( $files as $file ) {
+            $scanDirectory( $file );
+        }
+    } else if(strcasecmp(substr($target, -4), '.mp3') == 0) {
+        addMp3File($target);
+    }
+};
+$scanDirectory($dataDir);
