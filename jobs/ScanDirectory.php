@@ -25,12 +25,11 @@ if(!file_exists($dataDir)) {
 global $db;
 $db = new SQLite3($dbFile);
 
-global $tagger;
-$tagger = new \duncan3dc\MetaAudio\Tagger;
-$tagger->addDefaultModules();
 
 function addMp3File($file) {
-    global $tagger, $db;
+    global $db;
+    $tagger = new \duncan3dc\MetaAudio\Tagger;
+    $tagger->addDefaultModules();
     $mp3 = $tagger->open($file);
     $duration = new \MP3File($file);
 
