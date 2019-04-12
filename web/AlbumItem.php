@@ -14,6 +14,8 @@ $stmt = $db->prepare("
            t.id as id,
            t.title as title,
            t.duration as duration,
+           t.album_id as album_id,
+           t.artist_id as artist_id,
            a.title as album_title,
            a.year as album_year,
            b.title as artist_title
@@ -30,14 +32,9 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
     $return[] = [
         'id' => $row['id'],
         'title' => $row['title'],
+        'album_id' => $row['album_id'],
+        'artist_id' => $row['artist_id'],
         'duration' => $row['duration'],
-        'album' => [
-            'title' => $row['album_title'],
-            'year' => $row['album_year'],
-        ],
-        'artist' => [
-            'title' => $row['artist_title'],
-        ],
     ];
 }
 
