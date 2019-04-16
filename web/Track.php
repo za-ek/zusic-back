@@ -9,7 +9,7 @@ try {
     return;
 }
 $db = new SQLite3($dbFile);
-$stmt = $db->prepare("SELECT path, title FROM tracks WHERE id = :id");
+$stmt = $db->prepare("SELECT path, title, duration FROM tracks WHERE id = :id");
 $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
 $result = $stmt->execute();
 
@@ -21,6 +21,7 @@ if($result = $result->fetchArray(SQLITE3_NUM)) {
     header('X-Pad: avoid browser bug');
     header('Cache-Control: no-cache');
     header("Content-Transfer-Encoding: chunked");
+    header("X-Content-Duration: {$result[2]}");
 
     readfile($result[0]);
 } else {

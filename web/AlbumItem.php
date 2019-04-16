@@ -38,4 +38,6 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
     ];
 }
 
-return $return;
+return [
+    'tracks' => $return
+];

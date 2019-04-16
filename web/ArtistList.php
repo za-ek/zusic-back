@@ -11,8 +11,14 @@ try {
 $db = new SQLite3($dbFile);
 $result = $db->query("SELECT * FROM artists");
 $return = [];
-while($row = $result->fetchArray()) {
-    $return[] = $row;
+while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+    $return[] = $row + [
+        'genre' => [
+            'title' => ''
+        ]
+    ];
 }
 
-return $return;
+return [
+    'artists' => $return
+];

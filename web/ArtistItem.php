@@ -13,8 +13,12 @@ $stmt = $db->prepare("SELECT * FROM artists WHERE id=:id");
 $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
 $result = $stmt->execute();
 $return = [];
-while($row = $result->fetchArray()) {
-    $return[] = $row;
+while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+    $return[] = $row + [
+        'genre' => [
+            'title' => ''
+        ]
+    ];
 }
 
 return $return;
