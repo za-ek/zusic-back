@@ -119,3 +119,5 @@ $scanDirectory = function ($target) use (&$scanDirectory){
     }
 };
 $scanDirectory($dataDir);
+
+include "Consistency.php";

@@ -14,6 +14,7 @@ try {
             'GET /tracks/<id:\d+>' => '/web/Track.php',
 
             'CLI /scan' => '/jobs/ScanDirectory.php',
+            'CLI /consist' => '/jobs/Consistency.php',
             'CLI /install' => '/install.php',
         ],
         'dataDir' => __DIR__.'/music',
