@@ -95,6 +95,10 @@ function findAlbum(SQLite3 $db, $artist, $album, $year) {
             $stmt->execute();
 
             $album = $db->lastInsertRowID();
+
+            $stmt = $db->prepare("UPDATE artists SET album_count = album_count + 1 WHERE id = :artist_id");
+            $stmt->bindValue(':artist_id', $artist);
+            $stmt->execute();
         }
     }
 

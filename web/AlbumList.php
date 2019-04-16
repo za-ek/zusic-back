@@ -9,11 +9,7 @@ try {
     return;
 }
 $db = new SQLite3($dbFile);
-if ($this->getAction()->getVar('id')) {
-    $stmt = $db->prepare("SELECT * FROM albums WHERE artist_id=:id");
-    $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
-} else {
-    $stmt = $db->prepare("
+$query = "
         SELECT 
                a.id as id,
                a.title as title,
@@ -23,8 +19,15 @@ if ($this->getAction()->getVar('id')) {
                b.title as artist_title
         FROM albums a
         LEFT JOIN artists b ON b.id = a.artist_id
-    ");
+    ";
+if ($this->getAction()->getVar('id')) {
+    $query .= " WHERE artist_id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
+} else {
+    $stmt = $db->prepare($query);
 }
+
 $result = $stmt->execute();
 $return = [];
 while($row = $result->fetchArray(SQLITE3_ASSOC)) {
