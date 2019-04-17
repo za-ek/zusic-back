@@ -14,14 +14,14 @@ $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
 $result = $stmt->execute();
 
 if($result = $result->fetchArray(SQLITE3_NUM)) {
-    $mime_type = "audio/mpeg, audio/x-mpeg, audio/x-mpeg-3, audio/mpeg3";
-    header('Content-Type: ' . $mime_type);
+    $size = filesize($result[0]);
+    header('HTTP/1.1 206 Partial Content');
     header('Content-Disposition: inline;filename="'.$result[1].'.mp3"');
-    header('Content-length: '.filesize($result[0]));
-    header('X-Pad: avoid browser bug');
-    header('Cache-Control: no-cache');
-    header("Content-Transfer-Encoding: chunked");
     header("X-Content-Duration: {$result[2]}");
+    header('Content-length: '.$size);
+    header("Content-Range: bytes 0-".($size-1)."/{$size}");
+    header('Content-Type: audio/mpeg, audio/x-mpeg, audio/x-mpeg-3, audio/mpeg3');
+    header("Last-Modified: ".gmdate('D, d M Y H:i:s', @filemtime($result[0])) . ' GMT' );
 
     readfile($result[0]);
 } else {
