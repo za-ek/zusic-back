@@ -24,10 +24,12 @@ $stmt = $db->prepare("
         LEFT JOIN artists b on b.id = t.artist_id
     WHERE album_id = :id
 ");
-$stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
+$albumId = (int)$this->getAction()->getVar('id');
+$stmt->bindValue(':id', $albumId, SQLITE3_INTEGER);
 $result = $stmt->execute();
 $return = [];
 $len = strlen($this->getController()->getConf('dataDir'));
+$artistsIds = [];
 while($row = $result->fetchArray(SQLITE3_ASSOC)) {
     $return[] = [
         'id' => $row['id'],
@@ -36,8 +38,26 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
         'artist_id' => $row['artist_id'],
         'duration' => $row['duration'],
     ];
+    $artistsIds[] = $row['artist_id'];
+}
+
+$artistList = [];
+$albumList = [];
+
+if ($return) {
+    $result = $db->query("SELECT id, title FROM artists WHERE id IN (" . implode(',', $artistsIds) . ")");
+    while($artist = $result->fetchArray(SQLITE3_ASSOC)) {
+        $artistList[] = $artist;
+    }
+
+    $result = $db->query("SELECT id, title FROM albums WHERE id IN (" . implode(',', [$albumId]) . ")");
+    if($result && $album = $result->fetchArray(SQLITE3_ASSOC)) {
+        $albumList[] = $album;
+    }
 }
 
 return [
-    'tracks' => $return
+    'tracks' => $return,
+    'artists' => $artistList,
+    'albums' => $albumList,
 ];
