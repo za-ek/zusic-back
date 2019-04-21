@@ -41,3 +41,10 @@ $db->query(
     )
 "
 );
+
+$db->query("
+    DELETE FROM albums WHERE track_count = 0
+");
+$db->query("
+    DELETE FROM artists WHERE track_count = 0
+");

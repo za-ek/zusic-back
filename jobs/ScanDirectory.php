@@ -43,14 +43,15 @@ function addMp3File($file) {
     $result = $stmt->execute();
     if (!($row = $result->fetchArray())) {
         $stmt = $db->prepare(
-            "INSERT INTO tracks(title, path, artist_id, album_id, duration)
-                          VALUES(:title, :path, :artist, :album, :duration)"
+            "INSERT INTO tracks(title, path, artist_id, album_id, duration, updated_at)
+                          VALUES(:title, :path, :artist, :album, :duration, :updated)"
         );
         $stmt->bindValue(":title", $mp3->getTitle());
         $stmt->bindValue(":path", $file);
         $stmt->bindValue(":artist", $artist);
         $stmt->bindValue(":album", $album);
         $stmt->bindValue(":duration", $duration->getDuration());
+        $stmt->bindValue(":updated", time());
         $stmt->execute();
     }
 
@@ -120,4 +121,5 @@ $scanDirectory = function ($target) use (&$scanDirectory){
 };
 $scanDirectory($dataDir);
 
+include "DetectCompilations.php";
 include "Consistency.php";

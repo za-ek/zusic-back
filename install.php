@@ -13,7 +13,8 @@ $db->query("CREATE TABLE IF NOT EXISTS artists (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     title VARCHAR(128) NOT NULL,
     album_count INTEGER,
-    track_count INTEGER
+    track_count INTEGER,
+    is_compilation INTEGER(1) NOT NULL DEFAULT '0' 
 )");
 
 $db->query("CREATE TABLE IF NOT EXISTS albums (
@@ -30,5 +31,6 @@ $db->query("CREATE TABLE IF NOT EXISTS tracks (
     path VARCHAR(255) NOT NULL UNIQUE,
     artist_id INTEGER,
     album_id INTEGER,
-    duration INTEGER
+    duration INTEGER,
+    updated_at INTEGER
 );");

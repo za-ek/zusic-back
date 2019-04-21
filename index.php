@@ -12,9 +12,11 @@ try {
             'GET:json /albums' => '/web/AlbumList.php',
             'GET:json /albums/<id:\d+>' => '/web/AlbumItem.php',
             'GET /tracks/<id:\d+>' => '/web/Track.php',
+            'OPTIONS /tracks/<id:\d+>' => '/web/Track.php',
 
             'CLI /scan' => '/jobs/ScanDirectory.php',
             'CLI /consist' => '/jobs/Consistency.php',
+            'CLI /compilations' => '/jobs/DetectCompilations.php',
             'CLI /install' => '/install.php',
         ],
         'dataDir' => __DIR__.'/music',
