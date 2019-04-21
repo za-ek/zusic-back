@@ -10,7 +10,7 @@ try {
 }
 $db = new SQLite3($dbFile);
 $stmt = $db->prepare("SELECT path, title, duration FROM tracks WHERE id = :id");
-$stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
+$stmt->bindValue(':id', $this->getAction()->getRequest()->get('id')['id'], SQLITE3_INTEGER);
 $result = $stmt->execute();
 
 if($result = $result->fetchArray(SQLITE3_NUM)) {
@@ -24,6 +24,7 @@ if($result = $result->fetchArray(SQLITE3_NUM)) {
     header("Last-Modified: ".gmdate('D, d M Y H:i:s', @filemtime($result[0])) . ' GMT' );
 
     readfile($result[0]);
+    die();
 } else {
     throw new \Zaek\Framy\Action\NotFound;
 }

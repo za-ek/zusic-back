@@ -20,10 +20,10 @@ $query = "
         FROM albums a
         LEFT JOIN artists b ON b.id = a.artist_id
     ";
-if ($this->getAction()->getVar('id')) {
+if ($this->getAction()->getRequest()->get('id')) {
     $query .= " WHERE artist_id = :id";
     $stmt = $db->prepare($query);
-    $stmt->bindValue(':id', $this->getAction()->getVar('id'), SQLITE3_INTEGER);
+    $stmt->bindValue(':id', $this->getAction()->getRequest()->get('id')['id'], SQLITE3_INTEGER);
 } else {
     $stmt = $db->prepare($query);
 }

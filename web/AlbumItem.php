@@ -24,7 +24,7 @@ $stmt = $db->prepare("
         LEFT JOIN artists b on b.id = t.artist_id
     WHERE album_id = :id
 ");
-$albumId = (int)$this->getAction()->getVar('id');
+$albumId = (int)$this->getAction()->getRequest()->get('id')['id'];
 $stmt->bindValue(':id', $albumId, SQLITE3_INTEGER);
 $result = $stmt->execute();
 $return = [];
