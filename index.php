@@ -21,10 +21,7 @@ try {
         'dbFile' => __DIR__.'/db/music.sqlite',
     ]);
     $controller->handle();
-    $action = $controller->getRouter()->getRequestAction(
-        $controller->getRequest()->getMethod(),
-        $controller->getRequest()->getUri()
-    );
+    $action = $controller->getRouter()->getRequestAction($controller->getRequest());
     $controller->getResponse()->flush();
 
 } catch (\Exception $e) {
