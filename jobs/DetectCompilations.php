@@ -74,3 +74,5 @@ foreach($foundTitles as $title) {
         }
     }
 }
+
+include "Consistency.php";
