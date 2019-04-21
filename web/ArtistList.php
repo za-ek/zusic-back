@@ -9,7 +9,7 @@ try {
     return;
 }
 $db = new SQLite3($dbFile);
-$result = $db->query("SELECT * FROM artists");
+$result = $db->query("SELECT * FROM artists ORDER BY title");
 $return = [];
 while($row = $result->fetchArray(SQLITE3_ASSOC)) {
     $return[] = $row + [
