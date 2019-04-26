@@ -4,11 +4,14 @@ include __DIR__ . "/../mp3.php";
  * @var \Zaek\Framy\Application $this
  */
 
-try {
-    $dataDir = $this->getController()->getConf('dataDir');
-} catch (\Zaek\Framy\InvalidConfiguration $e) {
-    echo 'You need put `dataDir` configuration option in /index.php';
-    return;
+$dataDir = $this->getAction()->getRequest()->getArgument('dataDir');
+if(!$dataDir) {
+    try {
+        $dataDir = $this->getController()->getConf('dataDir');
+    } catch (\Zaek\Framy\InvalidConfiguration $e) {
+        echo 'You need put `dataDir` configuration option in /index.php';
+        return;
+    }
 }
 
 try {
@@ -24,6 +27,7 @@ if(!file_exists($dataDir)) {
 }
 global $db;
 $db = new SQLite3($dbFile);
+$db->busyTimeout(5000);
 
 
 function addMp3File($file) {
@@ -118,6 +122,8 @@ $scanDirectory = function ($target) use (&$scanDirectory){
     } else if(strcasecmp(substr($target, -4), '.mp3') == 0) {
         addMp3File($target);
     }
+    ob_end_flush();
+    ob_start();
 };
 $scanDirectory($dataDir);
 
