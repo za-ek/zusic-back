@@ -46,7 +46,7 @@ foreach($foundTitles as $title) {
                 $db->query("
                     UPDATE tracks
                     SET title = (
-                        SELECT title
+                        SELECT (case title when '' then 'unknown artist' else title end)
                         FROM artists
                         WHERE artist_id = artists.id
                     ) || ' - ' || title
