@@ -52,8 +52,12 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
         'artist_id' => $row['artist_id'],
         'duration' => $row['duration'],
     ];
-    $artistsIds[] = $row['artist_id'];
-    $albumId[] = $row['album_id'];
+    if($row['artist_id']) {
+        $artistsIds[] = $row['artist_id'];
+    }
+    if($row['album_id']) {
+        $albumId[] = $row['album_id'];
+    }
 }
 
 $artistList = [];
