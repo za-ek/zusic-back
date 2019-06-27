@@ -6,6 +6,7 @@ try {
     $controller = new \Zaek\Framy\Controller([
         'homeDir' => __DIR__,
         'routes' => [
+            'GET:json /tracks/random' => '/web/RandomTracks.php',
             'GET:json /artists' => '/web/ArtistList.php',
             'GET:json /artists/<id:\d+>/albums' => '/web/AlbumList.php',
             'GET:json /artists/<id:\d+>' => '/web/ArtistItem.php',
