@@ -164,9 +164,13 @@ class MP3File
 
     private static function framesize($layer, $bitrate,$sample_rate,$padding_bit)
     {
-        if ($layer==1)
-            return intval(((12 * $bitrate*1000 /$sample_rate) + $padding_bit) * 4);
-        else //layer 2, 3
-            return intval(((144 * $bitrate*1000)/$sample_rate) + $padding_bit);
+        if($sample_rate > 0) {
+            if ($layer == 1)
+                return intval(((12 * $bitrate * 1000 / $sample_rate) + $padding_bit) * 4);
+            else //layer 2, 3
+                return intval(((144 * $bitrate * 1000) / $sample_rate) + $padding_bit);
+        } else {
+            return 0;
+        }
     }
 }
