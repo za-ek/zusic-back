@@ -2,6 +2,9 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 try {
+    $dotenv = Dotenv\Dotenv::create(__DIR__.'/env');
+    $dotenv->load();
+
     header('Access-Control-Allow-Origin: http://localhost:8081');
     $controller = new \Zaek\Framy\Controller([
         'homeDir' => __DIR__,
@@ -22,6 +25,12 @@ try {
         ],
         'dataDir' => __DIR__.'/music',
         'dbFile' => __DIR__.'/db/music.sqlite',
+        'db' => [
+            'login' => 'root',
+            'password' => getenv('MYSQL_PASSWORD'),
+            'host' => '172.26.5.3',
+            'dbname' => 'zusic'
+        ],
     ]);
     $controller->handle();
     $action = $controller->getRouter()->getRequestAction($controller->getRequest());

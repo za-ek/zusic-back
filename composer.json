@@ -13,6 +13,7 @@
     "require": {
         "zaek/framy": "2.0.0-alpha.1",
         "duncan3dc/meta-audio": "^0.4.0",
-        "ext-sqlite3": "*"
+        "ext-sqlite3": "*",
+        "vlucas/phpdotenv": "^3.4"
     }
 }
