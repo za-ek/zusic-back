@@ -1,0 +1,1 @@
+ALTER TABLE `zusic`.`files` ADD `year` SMALLINT UNSIGNED
