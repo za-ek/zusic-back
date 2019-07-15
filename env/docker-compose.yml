@@ -29,7 +29,7 @@ services:
 
   php:
     container_name: ${PROJECT_NAME}_fpm
-    image: zaek_php
+    image: zaek/php-fpm
     volumes:
       - "./../:/home/zusic"
     networks:
