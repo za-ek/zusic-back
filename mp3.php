@@ -158,7 +158,7 @@ class MP3File
         //$info['Original'] = $original_bit;
         //$info['Emphasis'] = $emphasis;
         $info['Framesize'] = self::framesize($layer, $bitrate, $sample_rate, $padding_bit);
-        $info['Samples'] = $samples[$simple_version][$layer];
+        $info['Samples'] = @$samples[$simple_version][$layer];
         return $info;
     }
 

@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS zusic COLLATE=utf8_general_ci;
 
 USE mysql;
 update db set User='root' where Db='zusic';
-update user set Host='172.26.5.2' where user='root';
+update user set Host='%' where user='root';
 
 FLUSH PRIVILEGES;
 
