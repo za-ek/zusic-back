@@ -5,11 +5,15 @@ try {
     $dotenv = Dotenv\Dotenv::create(__DIR__.'/env');
     $dotenv->load();
 
+    $conf = Dotenv\Dotenv::create(__DIR__);
+    $conf->load();
+
     header('Access-Control-Allow-Origin: http://localhost:8081');
     $controller = new \Zaek\Framy\Controller([
         'homeDir' => __DIR__,
         'routes' => [
             'GET:json /tracks/random' => '/web/RandomTracks.php',
+            'GET:json /genres' => '/web/GenreList.php',
             'GET:json /artists' => '/web/ArtistList.php',
             'GET:json /artists/<id:\d+>/albums' => '/web/AlbumList.php',
             'GET:json /artists/<id:\d+>' => '/web/ArtistItem.php',
@@ -23,8 +27,8 @@ try {
             'CLI /compilations' => '/jobs/DetectCompilations.php',
             'CLI /install' => '/install.php',
         ],
-        'dataDir' => __DIR__.'/music',
-        'dbFile' => __DIR__.'/db/music.sqlite',
+        'dataDir' => getenv('datadir'),
+        'dbFile' => getenv('dbfile'),
         'db' => [
             'login' => 'root',
             'password' => getenv('MYSQL_PASSWORD'),
