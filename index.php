@@ -9,7 +9,7 @@ try {
     $conf->load();
 
     header('Access-Control-Allow-Origin: http://localhost:8081');
-    $controller = new \Zaek\Framy\Controller([
+    $controller = new class([
         'homeDir' => __DIR__,
         'routes' => [
             'GET:json /tracks/random' => '/web/RandomTracks.php',
@@ -35,7 +35,22 @@ try {
             'host' => '172.26.5.3',
             'dbname' => 'zusic'
         ],
-    ]);
+    ]) extends \Zaek\Framy\Controller {
+        public function db() {
+            static $db;
+            if(empty($db)) {
+                $conf = $this->getConf('db');
+                $mysqli = new \mysqli($conf['host'], $conf['login'], $conf['password'], $conf['dbname']);
+                $mysqli->autocommit(false);
+
+                if($mysqli->connect_error) {
+                    throw new Exception($mysqli->connect_error);
+                }
+            }
+
+            return $db;
+        }
+    };
     $controller->handle();
     $action = $controller->getRouter()->getRequestAction($controller->getRequest());
     $controller->getResponse()->flush();

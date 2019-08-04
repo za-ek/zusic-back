@@ -19,14 +19,7 @@ if(!file_exists($dataDir)) {
 }
 
 try {
-    $db = $this->getController()->getConf('db');
-    global $mysqli;
-    $mysqli = new mysqli($db['host'], $db['login'], $db['password'], $db['dbname']);
-    $mysqli->autocommit(false);
-
-    if($mysqli->connect_error) {
-        die($mysqli->connect_error);
-    }
+    $mysqli = $this->getController()->db();
 } catch (\Zaek\Framy\InvalidConfiguration $e) {
     echo 'Couldn\'t connect to database';
     return;
@@ -35,6 +28,7 @@ try {
 global $total;
 $total = 0;
 function addMp3File($file) {
+    echo 'add mp3 ' . $file . PHP_EOL;
     global $mysqli;
     static $total;
     $tagger = new \duncan3dc\MetaAudio\Tagger;
