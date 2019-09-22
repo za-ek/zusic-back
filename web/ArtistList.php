@@ -8,15 +8,20 @@ try {
     echo 'You need put `dbFile` configuration option in /index.php';
     return;
 }
-$db = new SQLite3($dbFile);
-$result = $db->query("SELECT * FROM artists ORDER BY title");
-$return = [];
-while($row = $result->fetchArray(SQLITE3_ASSOC)) {
-    $return[] = $row + [
-        'genre' => [
-            'title' => ''
-        ]
-    ];
+/**
+ * @var $mysqli mysqli
+ */
+$mysqli = $this->getController()->db();
+$result = $mysqli->query("SELECT * FROM artists ORDER BY title ASC");
+if($result) {
+    $return = [];
+    while ($row = $result->fetch_assoc()) {
+        $return[] = $row + [
+                'genre' => [
+                    'title' => ''
+                ]
+            ];
+    }
 }
 
 return [

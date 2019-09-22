@@ -7,7 +7,7 @@
  * ... https://www.php.net/manual/de/migration5.databases.php
  */
 
-$db = new SQLite3($this->getController()->getConf('dbFile'));
+$db = new Mysqli($this->getController()->getConf('mysqli'));
 
 $db->query("CREATE TABLE IF NOT EXISTS artists (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

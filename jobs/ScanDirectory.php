@@ -3,6 +3,14 @@ include __DIR__ . "/../mp3.php";
 /**
  * @var \Zaek\Framy\Application $this
  */
+ob_implicit_flush(1);
+ob_get_clean();
+
+$log = new class {
+    public function log($line, $level = 0) {
+        echo $line . PHP_EOL;
+    }
+};
 
 $dataDir = $this->getAction()->getRequest()->getArgument('dataDir');
 if(!$dataDir) {
@@ -18,6 +26,8 @@ if(!file_exists($dataDir)) {
     return;
 }
 
+$log->log("data dir is ok");
+
 try {
     $mysqli = $this->getController()->db();
 } catch (\Zaek\Framy\InvalidConfiguration $e) {
@@ -25,11 +35,12 @@ try {
     return;
 }
 
+$log->log("connected to db " . get_class($mysqli));
+
 global $total;
 $total = 0;
-function addMp3File($file) {
+$addMp3File = function($file) use($mysqli) {
     echo 'add mp3 ' . $file . PHP_EOL;
-    global $mysqli;
     static $total;
     $tagger = new \duncan3dc\MetaAudio\Tagger;
     $tagger->addDefaultModules();
@@ -68,20 +79,22 @@ function addMp3File($file) {
     } else {
         error_log($mysqli->error);
     }
-}
+};
 
-$scanDirectory = function ($target) use (&$scanDirectory){
+$scanDirectory = function ($target) use (&$scanDirectory, $log, $addMp3File) {
     if(is_dir($target)){
+        $log->log("dir: {$target}");
         $files = glob( $target . '*', GLOB_MARK );
         foreach( $files as $file ) {
             $scanDirectory( $file );
         }
     } else if(strcasecmp(substr($target, -4), '.mp3') == 0) {
-        addMp3File($target);
+        $addMp3File($target);
+        $log->log("file: {$target}");
     }
-    ob_end_flush();
-    ob_start();
 };
+
+$log->log("go scan {$dataDir}");
 
 $scanDirectory($dataDir);
 $mysqli->commit();

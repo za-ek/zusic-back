@@ -1,19 +1,17 @@
 <?php
 /**
  * @var $this \Zaek\Framy\Application
+ * @var $mysqli mysqli
  */
-try {
-    $dbFile = $this->getController()->getConf('dbFile');
-} catch (\Zaek\Framy\InvalidConfiguration $e) {
-    echo 'You need put `dbFile` configuration option in /index.php';
-    return;
+$mysqli = $this->getController()->db();
+$stmt = $mysqli->prepare("SELECT file_path, title, duration FROM files WHERE id = ?");
+if(!$stmt) {
+    die($mysqli->error);
 }
-$db = new SQLite3($dbFile);
-$stmt = $db->prepare("SELECT path, title, duration, updated_at FROM tracks WHERE id = :id");
-$stmt->bindValue(':id', $this->getAction()->getRequest()->get('id')['id'], SQLITE3_INTEGER);
+$stmt->bind_param('i', $this->getAction()->getRequest()->get('id')['id']);
 $result = $stmt->execute();
 
-if($result = $result->fetchArray(SQLITE3_NUM)) {
+if($result = $stmt->get_result()->fetch_row()) {
     $bytesRange = [0];
     if (!empty($_SERVER['HTTP_RANGE'])) {
         $bytesRange = explode('-', substr($_SERVER['HTTP_RANGE'], strpos($_SERVER['HTTP_RANGE'], '=') + 1));

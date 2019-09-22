@@ -22,6 +22,7 @@ try {
             'GET /tracks/<id:\d+>' => '/web/Track.php',
             'OPTIONS /tracks/<id:\d+>' => '/web/Track.php',
 
+            'CLI /artists' => '/jobs/Artists.php',
             'CLI /scan' => '/jobs/ScanDirectory.php',
             'CLI /consist' => '/jobs/Consistency.php',
             'CLI /compilations' => '/jobs/DetectCompilations.php',
@@ -40,11 +41,11 @@ try {
             static $db;
             if(empty($db)) {
                 $conf = $this->getConf('db');
-                $mysqli = new \mysqli($conf['host'], $conf['login'], $conf['password'], $conf['dbname']);
-                $mysqli->autocommit(false);
+                $db = new \mysqli($conf['host'], $conf['login'], $conf['password'], $conf['dbname']);
+                $db->autocommit(false);
 
-                if($mysqli->connect_error) {
-                    throw new Exception($mysqli->connect_error);
+                if($db->connect_error) {
+                    throw new Exception($db->connect_error);
                 }
             }
 
